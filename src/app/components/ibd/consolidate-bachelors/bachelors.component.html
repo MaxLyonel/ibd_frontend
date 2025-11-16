@@ -1,0 +1,238 @@
+<div class="modern-page-container">
+  <!-- Header Mejorado -->
+  <!-- <div class="modern-header">
+    <div class="header-content">
+      <h1 class="page-title">
+        <i nz-icon nzType="trophy" nzTheme="outline"></i>
+        Candidatos a Bachiller de Excelencia - Gestión 2024
+      </h1>
+      <p class="page-subtitle">Selección y validación de estudiantes destacados</p>
+    </div>
+    <div class="header-badge">
+      <nz-tag nzColor="gold">Proceso Activo</nz-tag>
+    </div>
+  </div> -->
+
+  <!-- Panel de Progreso -->
+  <!-- <div class="progress-steps">
+    <nz-steps nzSize="small" [nzCurrent]="currentStep">
+      <nz-step nzTitle="Revisión" nzDescription="Verificar candidatos"></nz-step>
+      <nz-step nzTitle="Validación" nzDescription="Confirmar selección"></nz-step>
+      <nz-step nzTitle="Registro" nzDescription="Finalizar proceso"></nz-step>
+    </nz-steps>
+  </div> -->
+
+  <!-- Cards de Instrucciones -->
+  <!-- <div class="instructions-cards">
+    <nz-card nzTitle="Guía del Proceso" class="process-guide-card">
+      <div class="instruction-grid">
+        <div class="instruction-item">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>Revisión Automática</h4>
+            <p>Los promedios han sido calculados automáticamente por el sistema</p>
+          </div>
+        </div>
+        <div class="instruction-item">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>Validación Directiva</h4>
+            <p>Como Director, debe verificar y validar las calificaciones</p>
+          </div>
+        </div>
+        <div class="instruction-item">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>Confirmación Final</h4>
+            <p>Marque su conformidad con la selección de estudiantes</p>
+          </div>
+        </div>
+        <div class="instruction-item">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h4>Registro Oficial</h4>
+            <p>Complete el proceso registrando e imprimiendo la documentación</p>
+          </div>
+        </div>
+      </div>
+    </nz-card>
+  </div> -->
+
+
+  <!-- Panel de Control de Tabla -->
+  <!-- <div class="table-controls">
+    <div class="controls-left">
+      <div class="records-control">
+        <span class="control-label">Mostrar</span>
+        <nz-select [(ngModel)]="pageSize" 
+                   name="pageSize" 
+                   class="modern-select"
+                   nzSize="small">
+          <nz-option nzValue="10" nzLabel="10 registros"></nz-option>
+          <nz-option nzValue="20" nzLabel="20 registros"></nz-option>
+          <nz-option nzValue="50" nzLabel="50 registros"></nz-option>
+        </nz-select>
+      </div>
+      <div class="total-records">
+        <nz-tag nzColor="blue">{{ listaEstudiantes.length }} estudiantes</nz-tag>
+      </div>
+    </div>
+    
+    <div class="controls-right">
+      <div class="search-control">
+        <span class="control-label">Buscar:</span>
+        <nz-input-group nzPrefixIcon="search" class="modern-search">
+          <input 
+            nz-input 
+            [(ngModel)]="searchValue"
+            name="searchValue"
+            placeholder="Buscar estudiante..." 
+            nzSize="small" />
+        </nz-input-group>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- Tabla Moderna -->
+  <div class="modern-table-section">
+    <nz-table 
+      #modernTable 
+      [nzData]="listaEstudiantes" 
+      [nzPageSize]="pageSize"
+      nzShowSizeChanger
+      [nzFrontPagination]="false"
+      class="elegant-table"
+      nzSize="middle">
+      <thead>
+        <tr>
+          <th nzWidth="60px">#</th>
+          <th nzWidth="80px">Género</th>
+          <th nzWidth="120px">Código RUDE</th>
+          <th nzWidth="120px">C.I.</th>
+          <th>Apellido Paterno</th>
+          <th>Apellido Materno</th>
+          <th>Nombre(s)</th>
+          <th nzWidth="100px">Turno</th>
+          <th nzWidth="100px">Paralelo</th>
+          <th nzWidth="130px" nzRight="true">Promedio</th>
+          <th nzWidth="120px">Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let estudiante of modernTable.data; let i = index" 
+            class="table-row">
+          <td>
+            <div class="student-index">{{ i + 1 }}</div>
+          </td>
+          <td>
+            <nz-tag [nzColor]="estudiante.genero === 'FEM' ? 'pink' : 'blue'">
+              {{ estudiante.genero }}
+            </nz-tag>
+          </td>
+          <td>
+            <span class="data-value">{{ estudiante.codigoRude || '--' }}</span>
+          </td>
+          <td>
+            <span class="data-value">{{ estudiante.ci || '--' }}</span>
+          </td>
+          <td>
+            <span class="data-value">{{ estudiante.apellidoPaterno || '--' }}</span>
+          </td>
+          <td>
+            <span class="data-value">{{ estudiante.apellidoMaterno || '--' }}</span>
+          </td>
+          <td>
+            <strong class="student-name">{{ estudiante.nombre || '--' }}</strong>
+          </td>
+          <td>
+            <span class="data-value">{{ estudiante.turno || '--' }}</span>
+          </td>
+          <td>
+            <span class="data-value">{{ estudiante.paralelo || '--' }}</span>
+          </td>
+          <td class="text-right">
+            <div class="score-badge" [class.high-score]="estudiante.promedioCalculado >= 90">
+              <span class="score-value">{{ estudiante.promedioCalculado }}</span>
+              <i nz-icon nzType="rise" nzTheme="outline" 
+                 *ngIf="estudiante.promedioCalculado >= 90"
+                 class="score-trend"></i>
+            </div>
+          </td>
+          <td>
+            <button 
+              nz-button 
+              nzType="link" 
+              nzSize="small"
+              (click)="onRevisarCalculo(estudiante)"
+              class="action-btn">
+              <i nz-icon nzType="calculator" nzTheme="outline"></i>
+              Revisar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+
+    <div class="table-footer">
+      <div class="footer-info">
+        Mostrando {{ modernTable.data.length }} de {{ listaEstudiantes.length }} registros
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- Panel de Conformidad Mejorado -->
+  <div class="approval-panel" [class.approved]="estaConforme">
+    <div class="approval-content">
+      <div class="approval-icon">
+        <i nz-icon [nzType]="estaConforme ? 'check-circle' : 'exclamation-circle'" 
+           [nzTheme]="estaConforme ? 'fill' : 'outline'"
+           [class.checked]="estaConforme"></i>
+      </div>
+      <div class="approval-text">
+        <h3>Confirmación de Conformidad</h3>
+        <p>Declaro que he revisado y estoy de acuerdo con la selección de estudiantes como Bachilleres Destacados</p>
+      </div>
+      <div class="approval-action">
+        <label nz-checkbox 
+               name="estaConforme" 
+               [(ngModel)]="estaConforme"
+               class="modern-checkbox">
+          <span class="checkbox-label">
+            {{ estaConforme ? 'Confirmado' : 'Confirmar Selección' }}
+          </span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel de Acción Final -->
+  <div class="action-panel" [class.enabled]="estaConforme">
+    <div class="action-content">
+      <div class="action-info">
+        <h3>Finalizar Proceso</h3>
+        <p>Complete el registro oficial de los estudiantes seleccionados</p>
+      </div>
+      <div class="action-buttons">
+        <button 
+          nz-button 
+          nzType="default"
+          nzSize="large"
+          class="secondary-btn">
+          <i nz-icon nzType="printer" nzTheme="outline"></i>
+          Vista Previa
+        </button>
+        <button 
+          nz-button 
+          nzType="primary" 
+          nzSize="large"
+          (click)="onRegistrarEstudiantes()"
+          [disabled]="!estaConforme"
+          class="primary-action-btn">
+          <i nz-icon nzType="file-done" nzTheme="outline"></i>
+          Registrar e Imprimir DDJJ
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

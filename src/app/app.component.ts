@@ -4,9 +4,8 @@ import { RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.less'
+  template: `<router-outlet/>`
 })
 export class AppComponent {
-  title = 'ibd_frontend2';
+  title = 'Bachiller Destacado';
 }

@@ -1,0 +1,174 @@
+<nz-layout class="app-layout">
+  <!-- Sidebar con scroll independiente -->
+  <nz-sider
+    class="menu-sidebar"
+    nzCollapsible
+    nzWidth="256px"
+    nzBreakpoint="md"
+    [(nzCollapsed)]="isCollapsed"
+    [nzTrigger]="null">
+
+    <div class="sidebar-logo">
+      <a>
+        <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo">
+        <h1>BACHILLER DESTACADO</h1>
+      </a>
+    </div>
+
+    <!-- Contenedor con scroll para el menú -->
+    <div class="sidebar-menu-container">
+      <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+        <!-- @if(canReadDashboard$ | async){
+        <li nz-submenu nzOpen nzTitle="Dashboard" nzIcon="dashboard">
+            <ul>
+              @if(canReadDashboard$ | async){
+                <li nz-menu-item nzMatchRouter>
+                  <a routerLink="/alta-demanda/dashboard">Dashboard</a>
+                </li>
+              }
+              @if(canManageAdmin$ | async) {
+                <li nz-menu-item nzMatchRouter>
+                  <a routerLink="/alta-demanda/admin">Administrar acceso</a>
+                </li>
+              }
+            </ul>
+        </li>
+        } -->
+        <!-- @if(canReadPostulation$ | async) { -->
+        <li nz-submenu nzOpen nzTitle="Actualizacion de datos" nzIcon="edit">
+          <ul>
+            <li nz-menu-item nzMatchRouter>
+              <a routerLink="/ibd/actualizar-datos">Actualizar</a>
+            </li>
+          </ul>
+        </li>
+        <!-- } -->
+        <!-- @if((canReadInbox$ | async) || (canReadInboxRegister$ | async) || (canReadInboxSelection$ | async)) { -->
+          <li nz-submenu nzOpen nzTitle="Consolidar" nzIcon="safety">
+            <ul>
+              <!-- @if(canReadInbox$ | async) { -->
+              <li nz-menu-item nzMatchRouter>
+                <a routerLink="/ibd/consolidar-bachilleres">Consolidar Bachilleres</a>
+              </li>
+              <!-- } -->
+              <!-- @if(canReadInboxRegister$ | async) {
+              <li nz-menu-item nzMatchRouter>
+                <a routerLink="/alta-demanda/register-inbox">Bandeja de Registro</a>
+              </li>
+              } -->
+              <!-- @if(canReadInboxSelection$ | async) {
+              <li nz-menu-item nzMatchRouter>
+                <a routerLink="/alta-demanda/selection-inbox">Bandeja de seleccion</a>
+              </li>
+              } -->
+            </ul>
+          </li>
+        <!-- } -->
+
+        <!-- @if(canReadFollow$ | async) {
+        <li nz-submenu nzOpen nzTitle="Seguimiento" nzIcon="form">
+          <ul>
+            <li nz-menu-item nzMatchRouter>
+              <a routerLink="/alta-demanda/follow-up">Seguimiento</a>
+            </li>
+          </ul>
+        </li>
+        } -->
+        <!-- @if(canManageConfig$ | async) {
+        <li nz-submenu nzOpen nzTitle="Administración" nzIcon="setting">
+          <ul>
+            <li nz-menu-item nzMatchRouter>
+              <a routerLink="/alta-demanda/config">Configuración</a>
+            </li>
+          </ul>
+        </li>
+        } -->
+      </ul>
+    </div>
+  </nz-sider>
+
+  <nz-layout>
+    <nz-header>
+      <div class="app-header">
+        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+          <span class="trigger">
+            <i nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
+          </span>
+        </span>
+        <div class="header-avatar-container">
+          <div>
+            <span nz-typography><b>Usuario:</b> {{user.username}}</span>
+          </div>
+          <div>
+            <span nz-typography><b>Rol: </b> {{ roleName }}</span>
+          </div>
+          <div nz-dropdown [nzDropdownMenu]="menu" nzTrigger="click" nzPlacement="bottomRight">
+            <nz-avatar
+              nzText="usuario"
+              nzSize="default"
+              nzIcon="user"
+              class="header-avatar">
+            </nz-avatar>
+          </div>
+
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu>
+              <li nz-menu-item (click)="goToProfile()">Perfil</li>
+              <li nz-menu-item (click)="logout()">Cerrar sesión</li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+      </div>
+      <nz-drawer
+        [nzVisible]="visibleProfile"
+        [nzWidth]="270"
+        [nzClosable]="false"
+        (nzOnClose)="close()"
+      >
+        <ng-container *nzDrawerContent>
+          <p>USUARIO PERFIL</p>
+          <!-- {{ user.selectedRole.placeType | json }} -->
+          <nz-descriptions [nzColumn]="2" nzTitle="Datos personales">
+            <nz-descriptions-item [nzTitle]="nombreTpl" [nzSpan]="2">
+              {{ user.person.name | uppercase }}
+            </nz-descriptions-item>
+            <nz-descriptions-item [nzTitle]="apellidosTpl" [nzSpan]="2">
+              {{ user.person.lastName | uppercase }} {{ user.person.mothersLastName | uppercase }}
+            </nz-descriptions-item>
+            <nz-descriptions-item [nzTitle]="carnetTpl" [nzSpan]="2">
+              {{ user.person.identityCard }}
+            </nz-descriptions-item>
+          </nz-descriptions>
+          <nz-descriptions [nzColumn]="2" nzTitle="Datos adminstrativos">
+            <nz-descriptions-item [nzTitle]="rolTpl" [nzSpan]="2">{{ roleName | uppercase }}</nz-descriptions-item>
+            @if(user.selectedRole.role.id == 37) {
+              <nz-descriptions-item [nzTitle]="distritoTpl" [nzSpan]="2">{{ user.selectedRole.placeType.id == 0 ? 'Bolivia' : user.selectedRole.placeType.name | uppercase }}</nz-descriptions-item>
+              <nz-descriptions-item [nzTitle]="departmentTpl" [nzSpan]="2">{{ user.selectedRole.placeType?.parent.id == 0 ? 'Bolivia' : user.selectedRole.placeType?.parent.name | uppercase }}</nz-descriptions-item>
+            } @else if(user.selectedRole.role.id == 850){
+              <nz-descriptions-item [nzTitle]="departmentTpl" [nzSpan]="2">{{ user.selectedRole.placeType.id == 0 ? 'Bolivia' : user.selectedRole.placeType.name | uppercase }}</nz-descriptions-item>
+            } @else {
+              <nz-descriptions-item [nzTitle]="place" [nzSpan]="2">{{ user.selectedRole.placeType.id == 0 ? 'Bolivia' : user.selectedRole.placeType.name | uppercase }}</nz-descriptions-item>
+            }
+          </nz-descriptions>
+
+          <!-- Títulos personalizados -->
+          <ng-template #nombreTpl> <b>Nombre</b> </ng-template>
+          <ng-template #apellidosTpl> <b>Apellidos</b> </ng-template>
+          <ng-template #carnetTpl> <b>Carnet</b> </ng-template>
+
+          <ng-template #rolTpl> <b>Rol</b> </ng-template>
+          <ng-template #distritoTpl> <b >Distrito</b> </ng-template>
+          <ng-template #departmentTpl> <b>Departamento</b> </ng-template>
+          <ng-template #place> <b>Lugar</b> </ng-template>
+        </ng-container>
+      </nz-drawer>
+    </nz-header>
+
+    <!-- Contenido principal con scroll independiente -->
+    <nz-content class="main-content-with-scroll">
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>

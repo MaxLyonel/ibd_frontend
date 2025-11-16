@@ -1,0 +1,269 @@
+<!-- <div class="layout-container"> -->
+  <!-- Navbar Superior -->
+  <div class="main-content">
+    <!-- Contenido Principal -->
+    <div class="content-area" [class.content-collapsed]="isCollapsed">
+      <div class="registro-container">
+        <!-- Header Informativo -->
+        <nz-alert 
+          nzType="warning" 
+          nzMessage="Declaración Jurada" 
+          nzDescription="La información registrada constituye una declaración jurada. Verifique minuciosamente los datos ingresados, ya que no se podrán realizar cambios posteriores."
+          class="alert-header">
+        </nz-alert>
+
+        <div class="content-wrapper">
+          <!-- Información Actual -->
+          <nz-card nzTitle="1. Información Actual" class="info-card">
+            <nz-descriptions nzBordered [nzColumn]="2">
+              <nz-descriptions-item nzTitle="Código SIE">{{ datosActuales.codigoSIE }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Institución Educativa">{{ datosActuales.institucionEducativa }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="C.I.">{{ datosActuales.ci }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Complemento">{{ datosActuales.complemento || 'Ninguno' }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Apellido Paterno">{{ datosActuales.apellidoPaterno }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Apellido Materno">{{ datosActuales.apellidoMaterno }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Nombre(s)">{{ datosActuales.nombres }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Cargo">{{ datosActuales.cargo }}</nz-descriptions-item>
+            </nz-descriptions>
+          </nz-card>
+
+          <!-- Actualizar Información -->
+          <nz-card nzTitle="2. Actualizar Información Vigente" class="form-card">
+            <div class="card-header-actions">
+              <button 
+                nz-button 
+                nzType="primary" 
+                nzSize="large"
+                (click)="permitirEditar()"
+                *ngIf="!isEditing"
+                class="edit-button">
+                <i nz-icon nzType="edit"></i>
+                Permitir Editar
+              </button>
+              
+              <div class="action-buttons" *ngIf="isEditing">
+                <button 
+                  nz-button 
+                  nzSize="large"
+                  (click)="cancelarEdicion()"
+                  class="cancel-button">
+                  <i nz-icon nzType="close"></i>
+                  Cancelar
+                </button>
+                <button 
+                  nz-button 
+                  nzType="primary" 
+                  nzSize="large"
+                  (click)="mostrarConfirmacion()"
+                  class="save-button">
+                  <i nz-icon nzType="save"></i>
+                  Guardar Cambios
+                </button>
+              </div>
+            </div>
+
+            <nz-alert 
+              nzType="info" 
+              nzMessage="Validación SEGIP" 
+              nzDescription="Tome en cuenta que esta información será contrastada con SEGIP"
+              class="form-alert">
+            </nz-alert>
+
+            <form nz-form [formGroup]="registroForm" (ngSubmit)="mostrarConfirmacion()">
+              <div nz-row [nzGutter]="16">
+                <!-- Información Personal -->
+                <div nz-col nzXs="24" nzMd="12">
+                  <nz-form-item>
+                    <nz-form-label nzRequired>Carnet de Identidad</nz-form-label>
+                    <nz-form-control nzErrorTip="El carnet de identidad es requerido">
+                      <input nz-input formControlName="ci" placeholder="Ingrese el carnet de identidad" />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+
+                <div nz-col nzXs="24" nzMd="12">
+                  <nz-form-item>
+                    <nz-form-label>Complemento</nz-form-label>
+                    <nz-form-control nzWarningTip='El "complemento" NO se refiere al "lugar de expedición del CLI"'>
+                      <input nz-input formControlName="complemento" placeholder="Complemento" />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+              </div>
+
+              <div nz-row [nzGutter]="16">
+                <div nz-col nzXs="24" nzMd="12">
+                  <nz-form-item>
+                    <nz-form-label nzRequired>Expedido del CLI</nz-form-label>
+                    <nz-form-control nzErrorTip="Este campo es requerido">
+                      <nz-select formControlName="expedido" nzPlaceHolder="Seleccione expedición">
+                        <nz-option nzValue="NINGUNO" nzLabel="NINGUNO"></nz-option>
+                        <nz-option nzValue="LP" nzLabel="LA PAZ"></nz-option>
+                        <nz-option nzValue="SC" nzLabel="SANTA CRUZ"></nz-option>
+                        <nz-option nzValue="CB" nzLabel="COCHABAMBA"></nz-option>
+                        <nz-option nzValue="OR" nzLabel="ORURO"></nz-option>
+                        <nz-option nzValue="PT" nzLabel="POTOSÍ"></nz-option>
+                        <nz-option nzValue="TJ" nzLabel="TARIJA"></nz-option>
+                        <nz-option nzValue="CH" nzLabel="CHUQUISACA"></nz-option>
+                        <nz-option nzValue="BN" nzLabel="BENI"></nz-option>
+                        <nz-option nzValue="PD" nzLabel="PANDO"></nz-option>
+                      </nz-select>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+
+                <div nz-col nzXs="24" nzMd="12">
+                  <nz-form-item>
+                    <nz-form-label nzRequired>Nacional/Extranjero</nz-form-label>
+                    <nz-form-control nzErrorTip="Este campo es requerido">
+                      <nz-radio-group formControlName="nacionalidad">
+                        <label nz-radio nzValue="Nacional">Nacional</label>
+                        <label nz-radio nzValue="Extranjero">Extranjero</label>
+                      </nz-radio-group>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+              </div>
+
+              <div nz-row [nzGutter]="16">
+                <div nz-col nzXs="24" nzMd="8">
+                  <nz-form-item>
+                    <nz-form-label nzRequired>Apellido Paterno</nz-form-label>
+                    <nz-form-control nzErrorTip="El apellido paterno es requerido" nzWarningTip="En algunos casos es posible dejar este campo en blanco">
+                      <input nz-input formControlName="apellidoPaterno" placeholder="Apellido paterno" />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+
+                <div nz-col nzXs="24" nzMd="8">
+                  <nz-form-item>
+                    <nz-form-label nzRequired>Apellido Materno</nz-form-label>
+                    <nz-form-control nzErrorTip="El apellido materno es requerido">
+                      <input nz-input formControlName="apellidoMaterno" placeholder="Apellido materno" />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+
+                <div nz-col nzXs="24" nzMd="8">
+                  <nz-form-item>
+                    <nz-form-label nzRequired>Nombre(s)</nz-form-label>
+                    <nz-form-control nzErrorTip="El nombre es requerido">
+                      <input nz-input formControlName="nombres" placeholder="Nombres" />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+              </div>
+
+              <div nz-row [nzGutter]="16">
+                <div nz-col nzXs="24" nzMd="12">
+                  <nz-form-item>
+                    <nz-form-label nzRequired>Enlazador Apellido</nz-form-label>
+                    <nz-form-control nzErrorTip="Este campo es requerido" nzWarningTip="Debe verificar esta información para no presentar observaciones al momento del cobro">
+                      <nz-select formControlName="enlazadorApellido" nzPlaceHolder="Seleccione enlazador">
+                        <nz-option *ngFor="let opcion of opcionesEnlazador" [nzValue]="opcion.value" [nzLabel]="opcion.label"></nz-option>
+                      </nz-select>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+
+                <div nz-col nzXs="24" nzMd="12">
+                  <nz-form-item *ngIf="requiereApellidoEsposo">
+                    <nz-form-label nzRequired>Apellido de Esposo</nz-form-label>
+                    <nz-form-control nzErrorTip="Este campo es requerido cuando tiene enlazador" nzWarningTip='Llenar en caso de que tenga el enlazador en su Cédula: "De" o "Vda. de"'>
+                      <input nz-input formControlName="apellidoEsposo" placeholder="Apellido de esposo" />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+              </div>
+
+              <div nz-row [nzGutter]="16">
+                <div nz-col nzXs="24" nzMd="12">
+                  <nz-form-item>
+                    <nz-form-label nzRequired>Fecha de Nacimiento</nz-form-label>
+                    <nz-form-control nzErrorTip="La fecha de nacimiento es requerida">
+                      <nz-date-picker 
+                        formControlName="fechaNacimiento" 
+                        nzFormat="dd-MM-yyyy"
+                        style="width: 100%">
+                      </nz-date-picker>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+              </div>
+
+              <!-- Información Bancaria -->
+              <nz-divider nzText="Información Bancaria"></nz-divider>
+
+              <div nz-row [nzGutter]="16">
+                <div nz-col nzXs="24" nzMd="12">
+                  <nz-form-item>
+                    <nz-form-label nzRequired>Modalidad de Cobro</nz-form-label>
+                    <nz-form-control nzErrorTip="La modalidad de cobro es requerida">
+                      <nz-select formControlName="modalidadCobro" nzPlaceHolder="Seleccione modalidad de cobro">
+                        <nz-option *ngFor="let modalidad of modalidadesCobro" [nzValue]="modalidad.value" [nzLabel]="modalidad.label"></nz-option>
+                      </nz-select>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+
+                <div nz-col nzXs="24" nzMd="12" *ngIf="esAbonoEnCuenta">
+                  <nz-form-item>
+                    <nz-form-label nzRequired>Nro. Cuenta Bancaria</nz-form-label>
+                    <nz-form-control nzErrorTip="El número de cuenta es requerido para abono en cuenta" nzWarningTip="Debe verificar esta información para no presentar observaciones al momento del cobro">
+                      <input nz-input formControlName="cuentaBancaria" placeholder="Número de cuenta bancaria" />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+              </div>
+
+              <div nz-row [nzGutter]="16" *ngIf="!esAbonoEnCuenta">
+                <div nz-col nzXs="24">
+                  <nz-alert 
+                    nzType="info" 
+                    nzMessage="COBRO EN CAJA (BANCO UNIÓN)"
+                    nzDescription="Deberá retirar el monto correspondiente en cualquier agencia del BANCO UNIÓN a nivel nacional.">
+                  </nz-alert>
+                </div>
+              </div>
+
+              <div nz-row [nzGutter]="16" *ngIf="esAbonoEnCuenta">
+                <div nz-col nzXs="24">
+                  <nz-alert 
+                    nzType="info" 
+                    nzMessage="ABONO EN CUENTA"
+                    nzDescription="Deberá retirar el monto correspondiente en cualquier cajero del BANCO UNIÓN a nivel nacional.">
+                  </nz-alert>
+                </div>
+              </div>
+            </form>
+          </nz-card>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Confirmación -->
+  <nz-modal
+    [(nzVisible)]="isConfirmModalVisible"
+    nzTitle="Confirmación de Datos"
+    nzOkText="Aceptar"
+    nzCancelText="Cancelar"
+    (nzOnCancel)="cancelarConfirmacion()"
+    (nzOnOk)="confirmarDatos()"
+    [nzOkLoading]="isLoading">
+    <div *nzModalContent>
+      <nz-alert
+        nzType="warning"
+        nzMessage="Confirmación Final"
+        nzDescription="¿Está seguro que desea guardar los datos ingresados? Esta información constituye una declaración jurada y no podrá ser modificada posteriormente.">
+      </nz-alert>
+      <nz-descriptions nzBordered [nzColumn]="1" class="confirm-data">
+        <nz-descriptions-item nzTitle="Carnet de Identidad">{{ registroForm.value.ci }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Nombres Completos">{{ registroForm.value.nombres }} {{ registroForm.value.apellidoPaterno }} {{ registroForm.value.apellidoMaterno }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Fecha de Nacimiento">{{ registroForm.value.fechaNacimiento }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Modalidad de Cobro">{{ registroForm.value.modalidadCobro }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Número de Cuenta" *ngIf="esAbonoEnCuenta">{{ registroForm.value.cuentaBancaria }}</nz-descriptions-item>
+      </nz-descriptions>
+    </div>
+  </nz-modal>
+<!-- </div> -->
