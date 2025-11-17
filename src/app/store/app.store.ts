@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 
+
 interface AppState {
   user: any;
   teacherInfo?: any;
@@ -44,13 +45,19 @@ export class AppStore {
       }
   }
 
-  setUser(user: any) { // aqui es User
+  // Métodos de actualización
+  setUser(user: any) {
     this.setState({ user })
   }
 
   setTeacherInfo(info: any) {
     this.setState({ teacherInfo: info })
   }
+
+  setInstitutionInfo(info: any) {
+    this.setState({ institutionInfo: info })
+  }
+
 
   clear() {
     localStorage.removeItem(STORAGE_KEY)

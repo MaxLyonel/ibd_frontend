@@ -95,9 +95,9 @@
 
   <!-- Tabla Moderna -->
   <div class="modern-table-section">
-    <nz-table 
-      #modernTable 
-      [nzData]="listaEstudiantes" 
+    <nz-table
+      #outstandingBachelors
+      [nzData]="bachelors"
       [nzPageSize]="pageSize"
       nzShowSizeChanger
       [nzFrontPagination]="false"
@@ -119,27 +119,27 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let estudiante of modernTable.data; let i = index" 
+        <tr *ngFor="let estudiante of outstandingBachelors.data; let i = index"
             class="table-row">
           <td>
             <div class="student-index">{{ i + 1 }}</div>
           </td>
           <td>
-            <nz-tag [nzColor]="estudiante.genero === 'FEM' ? 'pink' : 'blue'">
+            <nz-tag [nzColor]="estudiante.genero === 'MASCULINO' ? 'blue' : 'pink'">
               {{ estudiante.genero }}
             </nz-tag>
           </td>
           <td>
-            <span class="data-value">{{ estudiante.codigoRude || '--' }}</span>
+            <span class="data-value">{{ estudiante.codigo_rude || '--' }}</span>
           </td>
           <td>
-            <span class="data-value">{{ estudiante.ci || '--' }}</span>
+            <span class="data-value">{{ estudiante.carnet_identidad || '--' }}</span>
           </td>
           <td>
-            <span class="data-value">{{ estudiante.apellidoPaterno || '--' }}</span>
+            <span class="data-value">{{ estudiante.paterno || '--' }}</span>
           </td>
           <td>
-            <span class="data-value">{{ estudiante.apellidoMaterno || '--' }}</span>
+            <span class="data-value">{{ estudiante.materno || '--' }}</span>
           </td>
           <td>
             <strong class="student-name">{{ estudiante.nombre || '--' }}</strong>
@@ -151,17 +151,17 @@
             <span class="data-value">{{ estudiante.paralelo || '--' }}</span>
           </td>
           <td class="text-right">
-            <div class="score-badge" [class.high-score]="estudiante.promedioCalculado >= 90">
-              <span class="score-value">{{ estudiante.promedioCalculado }}</span>
-              <i nz-icon nzType="rise" nzTheme="outline" 
-                 *ngIf="estudiante.promedioCalculado >= 90"
+            <div class="score-badge" [class.high-score]="estudiante.nota_cuant_prom >= '90'">
+              <span class="score-value">{{ estudiante.nota_cuant_prom }}</span>
+              <i nz-icon nzType="rise" nzTheme="outline"
+                 *ngIf="estudiante.nota_cuant_prom >= '90'"
                  class="score-trend"></i>
             </div>
           </td>
           <td>
-            <button 
-              nz-button 
-              nzType="link" 
+            <button
+              nz-button
+              nzType="link"
               nzSize="small"
               (click)="onRevisarCalculo(estudiante)"
               class="action-btn">
@@ -173,11 +173,11 @@
       </tbody>
     </nz-table>
 
-    <div class="table-footer">
+    <!-- <div class="table-footer">
       <div class="footer-info">
         Mostrando {{ modernTable.data.length }} de {{ listaEstudiantes.length }} registros
       </div>
-    </div>
+    </div> -->
   </div>
   
 

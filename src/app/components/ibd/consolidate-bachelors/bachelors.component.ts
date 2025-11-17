@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCardModule } from 'ng-zorro-antd/card';
-import { NzCheckListModule } from 'ng-zorro-antd/check-list';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -12,18 +11,21 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzStepsModule } from 'ng-zorro-antd/steps';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { BachelorsService } from '../../../services/apis/bachelors.service';
+import { AppStore } from '../../../store/app.store';
+import { APP_CONSTANTS } from '../../../constants/constants';
 
-interface Estudiante {
-  id: number;
+interface Bachelor {
   genero: string;
-  codigoRude: string;
-  ci: string;
-  apellidoPaterno: string;
-  apellidoMaterno: string;
+  codigo_rude: string;
+  carnet_identidad: string;
+  complemento: string;
+  paterno: string;
+  materno: string;
   nombre: string;
   turno: string;
   paralelo: string;
-  promedioCalculado: number;
+  nota_cuant_prom: string;
 }
 
 @Component({
@@ -46,40 +48,27 @@ interface Estudiante {
   templateUrl: './bachelors.component.html',
   styleUrls: ['./bachelors.component.less']
 })
-export default class CandidatosComponent {
+export default class BachelorsComponent implements OnInit {
+
+  bachelors: Array<Bachelor> = []
+  bachelorsService = inject(BachelorsService)
+  appStore = inject(AppStore)
+
+
+  ngOnInit(): void {
+    const { institutionInfo } = this.appStore.snapshot
+    const currentYear = APP_CONSTANTS.CURRENT_YEAR
+    this.bachelorsService.getBachelors(currentYear, institutionInfo.id).subscribe((response) => {
+      this.bachelors = response.data
+    })
+  }
+
+
   estaConforme = false;
   pageSize = 10;
   searchValue = '';
   currentStep = 1
-  listOfData:any = []
-  
 
-  listaEstudiantes: Estudiante[] = [
-    {
-      id: 1,
-      genero: 'MAE',
-      codigoRude: '',
-      ci: '',
-      apellidoPaterno: '',
-      apellidoMaterno: '',
-      nombre: '',
-      turno: '',
-      paralelo: '',
-      promedioCalculado: 91.08
-    },
-    {
-      id: 2,
-      genero: 'FEM',
-      codigoRude: '',
-      ci: '',
-      apellidoPaterno: '',
-      apellidoMaterno: '',
-      nombre: '',
-      turno: '',
-      paralelo: '',
-      promedioCalculado: 97.25
-    }
-  ];
 
   onRegistrarEstudiantes(): void {
     if (this.estaConforme) {
@@ -92,9 +81,9 @@ export default class CandidatosComponent {
     }
   }
 
-  onRevisarCalculo(estudiante: Estudiante): void {
+  onRevisarCalculo(estudiante: Bachelor): void {
     // Lógica para revisar el cálculo del promedio
-    console.log(`Revisando cálculo para estudiante ${estudiante.id}`);
+    // console.log(`Revisando cálculo para estudiante ${estudiante.id}`);
     // Aquí iría la lógica para revisar el cálculo
   }
 }
