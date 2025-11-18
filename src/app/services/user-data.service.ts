@@ -34,7 +34,7 @@ export class UserDataService {
           tap(instInfo => this.appStore.setInstitutionInfo(instInfo))
         ).subscribe({
           next: () => {
-            this.router.navigate(['/ibd/actualizar-datos'])
+            this.router.navigate(['/ibd/consolidar-bachilleres'])
           },
           error: (err) => {
               console.error('Error cargando datos del usuario:', err);

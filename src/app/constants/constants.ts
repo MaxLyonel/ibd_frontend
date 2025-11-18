@@ -4,7 +4,7 @@ export const IS_USER_ACTION = new HttpContextToken(() => false);
 
 
 export const APP_CONSTANTS = {
-  CURRENT_YEAR: new Date().getFullYear(),
+  CURRENT_YEAR: new Date().getFullYear() - 1,
   ROLES: {
     DIRECTOR_ROLE: 9,
     DISTRICT_ROLE: 37,

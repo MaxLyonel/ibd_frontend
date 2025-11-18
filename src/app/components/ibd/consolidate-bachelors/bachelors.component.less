@@ -29,7 +29,7 @@
 .modern-page-container {
   padding: 24px;
   background: @background-color;
-  min-height: 100vh;
+  min-height: 80vh;
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
@@ -616,4 +616,30 @@
 
 ::ng-deep .ant-table-wrapper .ant-table-thead > tr > th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
   background-color: rgba(255, 255, 255, 0.3);
+}
+
+.important-highlight {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+
+  background: #fff8e1;              /* fondo cálido */
+  border: 2px solid #ffecb5;         /* borde completo */
+  border-radius: 8px;
+
+  padding: 16px;
+  margin-top: 18px;
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08); /* sombra suave */
+}
+
+.important-highlight .icon {
+  font-size: 26px;
+  color: #d68910; /* tono cálido */
+}
+
+.important-highlight h3 {
+  margin: 0 0 8px 0;
+  color: #97650f;                   /* café suave */
+  font-weight: 600;
 }

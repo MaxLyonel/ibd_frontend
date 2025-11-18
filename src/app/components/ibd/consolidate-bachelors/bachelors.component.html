@@ -1,97 +1,4 @@
 <div class="modern-page-container">
-  <!-- Header Mejorado -->
-  <!-- <div class="modern-header">
-    <div class="header-content">
-      <h1 class="page-title">
-        <i nz-icon nzType="trophy" nzTheme="outline"></i>
-        Candidatos a Bachiller de Excelencia - Gestión 2024
-      </h1>
-      <p class="page-subtitle">Selección y validación de estudiantes destacados</p>
-    </div>
-    <div class="header-badge">
-      <nz-tag nzColor="gold">Proceso Activo</nz-tag>
-    </div>
-  </div> -->
-
-  <!-- Panel de Progreso -->
-  <!-- <div class="progress-steps">
-    <nz-steps nzSize="small" [nzCurrent]="currentStep">
-      <nz-step nzTitle="Revisión" nzDescription="Verificar candidatos"></nz-step>
-      <nz-step nzTitle="Validación" nzDescription="Confirmar selección"></nz-step>
-      <nz-step nzTitle="Registro" nzDescription="Finalizar proceso"></nz-step>
-    </nz-steps>
-  </div> -->
-
-  <!-- Cards de Instrucciones -->
-  <!-- <div class="instructions-cards">
-    <nz-card nzTitle="Guía del Proceso" class="process-guide-card">
-      <div class="instruction-grid">
-        <div class="instruction-item">
-          <div class="step-number">1</div>
-          <div class="step-content">
-            <h4>Revisión Automática</h4>
-            <p>Los promedios han sido calculados automáticamente por el sistema</p>
-          </div>
-        </div>
-        <div class="instruction-item">
-          <div class="step-number">2</div>
-          <div class="step-content">
-            <h4>Validación Directiva</h4>
-            <p>Como Director, debe verificar y validar las calificaciones</p>
-          </div>
-        </div>
-        <div class="instruction-item">
-          <div class="step-number">3</div>
-          <div class="step-content">
-            <h4>Confirmación Final</h4>
-            <p>Marque su conformidad con la selección de estudiantes</p>
-          </div>
-        </div>
-        <div class="instruction-item">
-          <div class="step-number">4</div>
-          <div class="step-content">
-            <h4>Registro Oficial</h4>
-            <p>Complete el proceso registrando e imprimiendo la documentación</p>
-          </div>
-        </div>
-      </div>
-    </nz-card>
-  </div> -->
-
-
-  <!-- Panel de Control de Tabla -->
-  <!-- <div class="table-controls">
-    <div class="controls-left">
-      <div class="records-control">
-        <span class="control-label">Mostrar</span>
-        <nz-select [(ngModel)]="pageSize"
-                   name="pageSize"
-                   class="modern-select"
-                   nzSize="small">
-          <nz-option nzValue="10" nzLabel="10 registros"></nz-option>
-          <nz-option nzValue="20" nzLabel="20 registros"></nz-option>
-          <nz-option nzValue="50" nzLabel="50 registros"></nz-option>
-        </nz-select>
-      </div>
-      <div class="total-records">
-        <nz-tag nzColor="blue">{{ listaEstudiantes.length }} estudiantes</nz-tag>
-      </div>
-    </div>
-    <div class="controls-right">
-      <div class="search-control">
-        <span class="control-label">Buscar:</span>
-        <nz-input-group nzPrefixIcon="search" class="modern-search">
-          <input
-            nz-input
-            [(ngModel)]="searchValue"
-            name="searchValue"
-            placeholder="Buscar estudiante..."
-            nzSize="small" />
-        </nz-input-group>
-      </div>
-    </div>
-  </div> -->
-
   <!-- Tabla Moderna -->
   <div class="modern-table-section">
     <nz-table
@@ -99,6 +6,7 @@
       [nzData]="bachelors"
       [nzPageSize]="pageSize"
       nzShowSizeChanger
+      [nzLoading]="loadingData"
       [nzFrontPagination]="false"
       class="elegant-table"
       nzSize="middle">
@@ -162,7 +70,8 @@
               nz-button
               nzType="link"
               nzSize="small"
-              (click)="checkCalculation(estudiante)"
+              [nzLoading]="estudiante.genero === 'FEMENINO' ? loadingFeminine : loadingMasculine"
+              (click)="checkCalculation(estudiante.genero)"
               class="action-btn">
               <i nz-icon nzType="calculator" nzTheme="outline"></i>
               Revisar
@@ -171,19 +80,13 @@
         </tr>
       </tbody>
     </nz-table>
-
-    <!-- <div class="table-footer">
-      <div class="footer-info">
-        Mostrando {{ modernTable.data.length }} de {{ listaEstudiantes.length }} registros
-      </div>
-    </div> -->
   </div>
 
   <!-- Panel de Conformidad Mejorado -->
   <div class="approval-panel" [class.approved]="isSatisfied">
     <div class="approval-content">
       <div class="approval-icon">
-        <i nz-icon [nzType]="isSatisfied ? 'check-circle' : 'exclamation-circle'" 
+        <i nz-icon [nzType]="isSatisfied ? 'check-circle' : 'exclamation-circle'"
            [nzTheme]="isSatisfied ? 'fill' : 'outline'"
            [class.checked]="isSatisfied"></i>
       </div>
@@ -192,10 +95,13 @@
         <p>Declaro que he revisado y estoy de acuerdo con la selección de estudiantes como Bachilleres Destacados</p>
       </div>
       <div class="approval-action">
-        <label nz-checkbox
-               name="estaConforme"
-               [(ngModel)]="isSatisfied"
-               class="modern-checkbox">
+        <label
+          nz-checkbox
+          name="estaConforme"
+          [(ngModel)]="isSatisfied"
+          class="modern-checkbox"
+        >
+          <!-- [nzDisabled]="bachelors.length === 0" -->
           <span class="checkbox-label">
             {{ isSatisfied ? 'Confirmado' : 'Confirmar Selección' }}
           </span>
@@ -224,13 +130,32 @@
           nz-button
           nzType="primary"
           nzSize="large"
-          (click)="consolidateBechelors()"
+          (click)="openDialog(consolidateTpl)"
           [disabled]="!isSatisfied"
+          [nzLoading]="loadingConsolidate"
           class="primary-action-btn">
           <i nz-icon nzType="file-done" nzTheme="outline"></i>
           Registrar e Imprimir DDJJ
         </button>
+        <ng-template #consolidateTpl>
+          <nz-alert
+            nzType="error"
+            nzShowIcon
+            [nzMessage]="dialog"
+          ></nz-alert>
+        </ng-template>
       </div>
+    </div>
+  </div>
+
+  <div class="important-highlight">
+    <div class="icon">⚠️</div>
+    <div class="text">
+      <h3>¡Importante!</h3>
+      <ul>
+        <li>La conformidad es responsabilidad única y exclusiva del director de la U.E.</li>
+        <li>Si no está de acuerdo con los candidatos, deberá presentar una nota formal con antecedentes.</li>
+      </ul>
     </div>
   </div>
 </div>

@@ -48,6 +48,7 @@ export default class LayoutComponent implements OnInit{
   roleName!: any
 
   visibleProfile:boolean = false
+  scope: string = ''
 
 
   public router = inject(Router)
@@ -99,11 +100,23 @@ export default class LayoutComponent implements OnInit{
   // )
 
   ngOnInit(): void {
-    const { user } = this.appStore.snapshot
+    const { user, institutionInfo } = this.appStore.snapshot
     this.user = user
     this.role = user.selectedRole
     const buffer = Buffer.from(user.selectedRole.role.name, 'latin1')
     this.roleName = iconv.decode(buffer, 'utf-8')
+
+    switch(institutionInfo?.type) {
+      case 1:
+        this.scope = 'Educación Regular'
+        break;
+      case 2:
+        this.scope = 'Educación Alternativa'
+        break
+      default:
+        this.scope = ''
+    }
+
     // this.abilities.loadAbilities(user.id).subscribe(() => {
     //   const ability = this.abilities.getAbility();
     //   this.cdr.detectChanges()
