@@ -5,9 +5,9 @@
     <div class="content-area" [class.content-collapsed]="isCollapsed">
       <div class="registro-container">
         <!-- Header Informativo -->
-        <nz-alert 
-          nzType="warning" 
-          nzMessage="Declaración Jurada" 
+        <nz-alert
+          nzType="warning"
+          nzMessage="Declaración Jurada"
           nzDescription="La información registrada constituye una declaración jurada. Verifique minuciosamente los datos ingresados, ya que no se podrán realizar cambios posteriores."
           class="alert-header">
         </nz-alert>
@@ -40,19 +40,18 @@
                 <i nz-icon nzType="edit"></i>
                 Permitir Editar
               </button>
-              
               <div class="action-buttons" *ngIf="isEditing">
-                <button 
-                  nz-button 
+                <button
+                  nz-button
                   nzSize="large"
                   (click)="cancelarEdicion()"
                   class="cancel-button">
                   <i nz-icon nzType="close"></i>
                   Cancelar
                 </button>
-                <button 
-                  nz-button 
-                  nzType="primary" 
+                <button
+                  nz-button
+                  nzType="primary"
                   nzSize="large"
                   (click)="mostrarConfirmacion()"
                   class="save-button">
@@ -62,9 +61,9 @@
               </div>
             </div>
 
-            <nz-alert 
-              nzType="info" 
-              nzMessage="Validación SEGIP" 
+            <nz-alert
+              nzType="info"
+              nzMessage="Validación SEGIP"
               nzDescription="Tome en cuenta que esta información será contrastada con SEGIP"
               class="form-alert">
             </nz-alert>
@@ -181,8 +180,8 @@
                   <nz-form-item>
                     <nz-form-label nzRequired>Fecha de Nacimiento</nz-form-label>
                     <nz-form-control nzErrorTip="La fecha de nacimiento es requerida">
-                      <nz-date-picker 
-                        formControlName="fechaNacimiento" 
+                      <nz-date-picker
+                        formControlName="fechaNacimiento"
                         nzFormat="dd-MM-yyyy"
                         style="width: 100%">
                       </nz-date-picker>
@@ -218,8 +217,8 @@
 
               <div nz-row [nzGutter]="16" *ngIf="!esAbonoEnCuenta">
                 <div nz-col nzXs="24">
-                  <nz-alert 
-                    nzType="info" 
+                  <nz-alert
+                    nzType="info"
                     nzMessage="COBRO EN CAJA (BANCO UNIÓN)"
                     nzDescription="Deberá retirar el monto correspondiente en cualquier agencia del BANCO UNIÓN a nivel nacional.">
                   </nz-alert>
@@ -228,8 +227,8 @@
 
               <div nz-row [nzGutter]="16" *ngIf="esAbonoEnCuenta">
                 <div nz-col nzXs="24">
-                  <nz-alert 
-                    nzType="info" 
+                  <nz-alert
+                    nzType="info"
                     nzMessage="ABONO EN CUENTA"
                     nzDescription="Deberá retirar el monto correspondiente en cualquier cajero del BANCO UNIÓN a nivel nacional.">
                   </nz-alert>

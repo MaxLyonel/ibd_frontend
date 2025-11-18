@@ -37,7 +37,7 @@
         <!-- @if(canReadPostulation$ | async) { -->
         <li nz-submenu nzOpen nzTitle="Actualizacion de datos" nzIcon="edit">
           <ul>
-            <li nz-menu-item nzMatchRouter>
+            <li nz-menu-item nzMatchRouter [nzDisabled]="true">
               <a routerLink="/ibd/actualizar-datos">Actualizar</a>
             </li>
           </ul>

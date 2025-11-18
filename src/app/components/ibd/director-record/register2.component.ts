@@ -85,51 +85,6 @@ export default class RegistroComponent implements OnInit {
     { label: 'Vda. de', value: 'Vda. de' }
   ];
 
-  menuItems: MenuItem[] = [
-    {
-      label: 'Dashboard',
-      icon: 'dashboard',
-      link: '/dashboard'
-    },
-    {
-      label: 'Registro',
-      icon: 'user',
-      link: '/registro'
-    },
-    // {
-    //   label: 'Reportes',
-    //   icon: 'bar-chart',
-    //   children: [
-    //     {
-    //       label: 'Reporte Mensual',
-    //       icon: 'line-chart',
-    //       link: '/reportes/mensual'
-    //     },
-    //     {
-    //       label: 'Reporte Anual',
-    //       icon: 'pie-chart',
-    //       link: '/reportes/anual'
-    //     }
-    //   ]
-    // },
-    // {
-    //   label: 'Configuración',
-    //   icon: 'setting',
-    //   children: [
-    //     {
-    //       label: 'Perfil',
-    //       icon: 'user',
-    //       link: '/configuracion/perfil'
-    //     },
-    //     {
-    //       label: 'Seguridad',
-    //       icon: 'lock',
-    //       link: '/configuracion/seguridad'
-    //     }
-    //   ]
-    // }
-  ];
-
   constructor(
     private fb: FormBuilder,
     private message: NzMessageService

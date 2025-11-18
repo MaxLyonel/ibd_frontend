@@ -64,8 +64,8 @@
     <div class="controls-left">
       <div class="records-control">
         <span class="control-label">Mostrar</span>
-        <nz-select [(ngModel)]="pageSize" 
-                   name="pageSize" 
+        <nz-select [(ngModel)]="pageSize"
+                   name="pageSize"
                    class="modern-select"
                    nzSize="small">
           <nz-option nzValue="10" nzLabel="10 registros"></nz-option>
@@ -77,16 +77,15 @@
         <nz-tag nzColor="blue">{{ listaEstudiantes.length }} estudiantes</nz-tag>
       </div>
     </div>
-    
     <div class="controls-right">
       <div class="search-control">
         <span class="control-label">Buscar:</span>
         <nz-input-group nzPrefixIcon="search" class="modern-search">
-          <input 
-            nz-input 
+          <input
+            nz-input
             [(ngModel)]="searchValue"
             name="searchValue"
-            placeholder="Buscar estudiante..." 
+            placeholder="Buscar estudiante..."
             nzSize="small" />
         </nz-input-group>
       </div>
@@ -163,7 +162,7 @@
               nz-button
               nzType="link"
               nzSize="small"
-              (click)="onRevisarCalculo(estudiante)"
+              (click)="checkCalculation(estudiante)"
               class="action-btn">
               <i nz-icon nzType="calculator" nzTheme="outline"></i>
               Revisar
@@ -179,27 +178,26 @@
       </div>
     </div> -->
   </div>
-  
 
   <!-- Panel de Conformidad Mejorado -->
-  <div class="approval-panel" [class.approved]="estaConforme">
+  <div class="approval-panel" [class.approved]="isSatisfied">
     <div class="approval-content">
       <div class="approval-icon">
-        <i nz-icon [nzType]="estaConforme ? 'check-circle' : 'exclamation-circle'" 
-           [nzTheme]="estaConforme ? 'fill' : 'outline'"
-           [class.checked]="estaConforme"></i>
+        <i nz-icon [nzType]="isSatisfied ? 'check-circle' : 'exclamation-circle'" 
+           [nzTheme]="isSatisfied ? 'fill' : 'outline'"
+           [class.checked]="isSatisfied"></i>
       </div>
       <div class="approval-text">
         <h3>Confirmación de Conformidad</h3>
         <p>Declaro que he revisado y estoy de acuerdo con la selección de estudiantes como Bachilleres Destacados</p>
       </div>
       <div class="approval-action">
-        <label nz-checkbox 
-               name="estaConforme" 
-               [(ngModel)]="estaConforme"
+        <label nz-checkbox
+               name="estaConforme"
+               [(ngModel)]="isSatisfied"
                class="modern-checkbox">
           <span class="checkbox-label">
-            {{ estaConforme ? 'Confirmado' : 'Confirmar Selección' }}
+            {{ isSatisfied ? 'Confirmado' : 'Confirmar Selección' }}
           </span>
         </label>
       </div>
@@ -207,27 +205,27 @@
   </div>
 
   <!-- Panel de Acción Final -->
-  <div class="action-panel" [class.enabled]="estaConforme">
+  <div class="action-panel" [class.enabled]="isSatisfied">
     <div class="action-content">
       <div class="action-info">
         <h3>Finalizar Proceso</h3>
         <p>Complete el registro oficial de los estudiantes seleccionados</p>
       </div>
       <div class="action-buttons">
-        <button 
-          nz-button 
+        <!-- <button
+          nz-button
           nzType="default"
           nzSize="large"
           class="secondary-btn">
           <i nz-icon nzType="printer" nzTheme="outline"></i>
           Vista Previa
-        </button>
-        <button 
-          nz-button 
-          nzType="primary" 
+        </button> -->
+        <button
+          nz-button
+          nzType="primary"
           nzSize="large"
-          (click)="onRegistrarEstudiantes()"
-          [disabled]="!estaConforme"
+          (click)="consolidateBechelors()"
+          [disabled]="!isSatisfied"
           class="primary-action-btn">
           <i nz-icon nzType="file-done" nzTheme="outline"></i>
           Registrar e Imprimir DDJJ

@@ -54,6 +54,7 @@ export default class BachelorsComponent implements OnInit {
   bachelorsService = inject(BachelorsService)
   appStore = inject(AppStore)
 
+  isSatisfied = false;
 
   ngOnInit(): void {
     const { institutionInfo } = this.appStore.snapshot
@@ -64,26 +65,40 @@ export default class BachelorsComponent implements OnInit {
   }
 
 
-  estaConforme = false;
   pageSize = 10;
   searchValue = '';
   currentStep = 1
 
 
-  onRegistrarEstudiantes(): void {
-    if (this.estaConforme) {
-      // Lógica para registrar estudiantes e imprimir DDJJ
-      console.log('Registrando estudiantes e imprimiendo DDJJ...');
-      // Aquí iría la lógica para registrar e imprimir
-    } else {
-      // Mostrar mensaje de que debe marcar la conformidad primero
-      console.log('Debe marcar la casilla de conformidad primero');
+  consolidateBechelors(): void {
+    if(this.isSatisfied) {
+
     }
   }
 
-  onRevisarCalculo(estudiante: Bachelor): void {
-    // Lógica para revisar el cálculo del promedio
-    // console.log(`Revisando cálculo para estudiante ${estudiante.id}`);
-    // Aquí iría la lógica para revisar el cálculo
+  checkCalculation(student: Bachelor): void {
+    const { institutionInfo, user } = this.appStore.snapshot;
+    const fullName = `${user.person.name} ${user.person.lastName} ${user.person.mothersLastName}`
+    const currentYear = APP_CONSTANTS.CURRENT_YEAR;
+    this.bachelorsService.reportBechelors(
+      currentYear,
+      institutionInfo.id,
+      student.genero,
+      fullName,
+      user.person.identityCard
+    ).subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `reporte-bachiller.pdf`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Error al generar el reporte', err);
+      }
+    });
   }
+
 }
