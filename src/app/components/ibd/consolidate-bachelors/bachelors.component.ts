@@ -17,6 +17,7 @@ import { APP_CONSTANTS } from '../../../constants/constants';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzListModule } from 'ng-zorro-antd/list';
 
 interface Bachelor {
   genero: string;
@@ -47,7 +48,8 @@ interface Bachelor {
     NzStepsModule,
     NzCardModule,
     NzAlertModule,
-    NzModalModule
+    NzModalModule,
+    NzListModule
   ],
   selector: 'app-candidatos',
   templateUrl: './bachelors.component.html',
@@ -74,9 +76,13 @@ export default class BachelorsComponent implements OnInit {
   dialog = `IMPORTANTE: Al realizar esta acción se establece a ambos estudiantes como bachilleres
   destacados en ${2025}`
 
+  isSeeVisibleDialog: boolean = false
+  institutionInfo: any = undefined
+
   ngOnInit(): void {
     this.loadingData = true
     const { institutionInfo } = this.appStore.snapshot
+    this.institutionInfo = institutionInfo
     const currentYear = APP_CONSTANTS.CURRENT_YEAR
     this.institutionTypeId = institutionInfo.type
     switch(institutionInfo.type) {
@@ -103,15 +109,21 @@ export default class BachelorsComponent implements OnInit {
   // currentStep = 1
 
   openDialog(tpl: TemplateRef<{}>) {
-    this.modal.confirm({
-      nzTitle: 'Consolidar a los estudiantes',
-      nzContent: tpl,
-      nzOkText: 'Consolidar',
-      nzCancelText: 'Cancelar',
-      nzWidth: 500,
-      nzOkLoading: this.loadingConsolidate,
-      nzOnOk: () => this.consolidateBechelors()
-    })
+    this.isSeeVisibleDialog = true
+    // this.modal.confirm({
+    //   nzTitle: 'Consolidar a los estudiantes',
+    //   nzContent: tpl,
+    //   nzOkText: 'Consolidar',
+    //   nzCancelText: 'Cancelar',
+    //   nzWidth: 500,
+    //   nzOkLoading: this.loadingConsolidate,
+    //   nzOnOk: () => this.consolidateBechelors()
+    // })
+  }
+
+  handleCancel() {
+    this.isSeeVisibleDialog = false
+    this.loadingConsolidate = false
   }
 
   consolidateBechelors(): void {
